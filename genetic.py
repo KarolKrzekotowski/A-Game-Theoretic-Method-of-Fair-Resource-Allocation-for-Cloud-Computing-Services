@@ -124,5 +124,4 @@ gra = GameTheory(
 a = GeneticAlgorithm(gra)
 
 a.run()
-# B = [[0, 1, 1, 0, 0], [0, 1, 1, 0, 1], [1, 0, 1, 1, 1]]
-# print(gra.Funkcja_celu_Z(B))
+print(a.best_result)

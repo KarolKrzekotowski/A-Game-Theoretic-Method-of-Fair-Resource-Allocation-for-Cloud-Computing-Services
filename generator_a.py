@@ -1,33 +1,28 @@
 import numpy as np
+from itertools import combinations 
+def generate_matrices(rows, constraints):
+    if not rows or not constraints:
+        return []
 
-def generate_matrices(p, K, M, matrix=None, row=0, result=None):
-    if matrix is None:
-        matrix = np.zeros((K, M), dtype=int)
-    if result is None:
-        result = []
+    def generate_helper(row_index, current_matrix):
+        if row_index == len(rows):
+            result.append(current_matrix.copy())
+            return
 
-    if row == K:
-        result.append(matrix.copy())
-        return result
+        for combination in combinations(range(len(current_matrix[row_index])), constraints[row_index]):
+            next_matrix = [row[:] for row in current_matrix]
+            for index in combination:
+                next_matrix[row_index][index] = 1
+            generate_helper(row_index + 1, next_matrix)
 
-    for j in range(M - p[row] + 1):
-        if not any(matrix[row, j:j+p[row]]):
-            matrix[row, j:j+p[row]] = 1
-            generate_matrices(p, K, M, matrix, row + 1, result)
-            matrix[row, j:j+p[row]] = 0
-
+    result = []
+    generate_helper(0, [[0] * len(rows[0]) for _ in range(len(rows))])
     return result
-# te co nie zgadzają się z granicami wynocha
-#ale granice sa pojebane to chuj wie co
-def exclude_bad_matrixes():
 
-    ...
+
+
 # Example usage:
-p = [2, 3, 4]
-K = 3
-M = 5
-
-result_matrices = generate_matrices(p, K, M)
-for matrix in result_matrices:
-    print(matrix)
+# binary_rows = [[0, 0, 1, 0, 1], [0, 1, 1, 1, 0], [1, 1, 0, 1, 1]]
+# constraints = [2, 3, 4]
+# matrices = generate_matrices(binary_rows, constraints)
 
